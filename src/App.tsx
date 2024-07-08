@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
+import { Button } from '@mui/base/Button';
 import './App.css';
 
 function App() {
@@ -7,12 +7,7 @@ function App() {
 
   return (
     <>
-      <div>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <Button className="py-20 font-bold text-red bg-blue-500">test</Button>
       <div className="card">
         <button
           type="button"
@@ -20,13 +15,7 @@ function App() {
         >
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
