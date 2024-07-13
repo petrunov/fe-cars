@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   TableContainer,
   Table,
@@ -7,76 +8,13 @@ import {
   TableBody,
   Paper,
 } from '@mui/material';
+import { Car } from '../../interfaces/Car';
 
-interface Data {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  engine: string;
-  type: string;
-  gearbox: string;
-  condition: string;
-  hp: number;
-  color: string;
-  price: number;
-  city: string;
-  mileage: string;
-  extras: string;
+interface CustomTableProps {
+  data: Car[];
 }
 
-const data: Data[] = [
-  {
-    id: 1,
-    make: 'Mercedes',
-    model: 'C-Class',
-    year: 2022,
-    engine: 'V6',
-    type: 'Sedan',
-    gearbox: 'Automatic',
-    condition: 'New',
-    hp: 250,
-    color: 'Red',
-    price: 50000,
-    city: 'Skopje',
-    mileage: '10000',
-    extras: 'ABS',
-  },
-  {
-    id: 2,
-    make: 'BMW',
-    model: 'M4',
-    year: 2020,
-    engine: 'V8',
-    type: 'Sports car',
-    gearbox: 'Manual',
-    condition: 'Used',
-    hp: 400,
-    color: 'Black',
-    price: 100000,
-    city: 'Tirana',
-    mileage: '50000',
-    extras: 'Sport mode',
-  },
-  {
-    id: 3,
-    make: 'Audi',
-    model: 'A8',
-    year: 2021,
-    engine: 'V10',
-    type: 'Luxury car',
-    gearbox: 'Automatic',
-    condition: 'New',
-    hp: 500,
-    color: 'White',
-    price: 150000,
-    city: 'Pristina',
-    mileage: '100000',
-    extras: 'Leather seats',
-  },
-];
-
-function CustomTable() {
+function CustomTable({ data }: CustomTableProps) {
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -108,7 +46,7 @@ function CustomTable() {
               <TableCell>{row.engine}</TableCell>
               <TableCell>{row.type}</TableCell>
               <TableCell>{row.gearbox}</TableCell>
-              <TableCell>{row.condition}</TableCell>
+              <TableCell>{row.car_condition}</TableCell>
               <TableCell>{row.hp}</TableCell>
               <TableCell>{row.color}</TableCell>
               <TableCell>{row.price}</TableCell>
