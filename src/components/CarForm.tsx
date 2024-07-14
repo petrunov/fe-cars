@@ -226,6 +226,11 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               max={3000}
               valueLabelDisplay="auto"
             />
+            {formik.touched.hp && formik.errors.hp && (
+              <Typography variant="body2" color="error">
+                {formik.errors.hp}
+              </Typography>
+            )}
           </Box>
           <Box sx={{ mt: 2, mb: 2 }}>
             <Typography component="label" variant="body1">
@@ -240,6 +245,11 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               max={1000000}
               valueLabelDisplay="auto"
             />
+            {formik.touched.price && formik.errors.price && (
+              <Typography variant="body2" color="error">
+                {formik.errors.price}
+              </Typography>
+            )}
           </Box>
           <FormControl fullWidth margin="normal">
             <InputLabel>City</InputLabel>
@@ -271,6 +281,11 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               max={1000000}
               valueLabelDisplay="auto"
             />
+            {formik.touched.mileage && formik.errors.mileage && (
+              <Typography variant="body2" color="error">
+                {formik.errors.mileage}
+              </Typography>
+            )}
           </Box>
           <TextField
             name="extras"
@@ -298,6 +313,13 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               </Alert>
             )}
           </Box>
+          {Object.keys(formik.errors).length > 0 && formik.touched && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {Object.values(formik.errors).map((error) => (
+                <div key={error}>{error}</div>
+              ))}
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth
