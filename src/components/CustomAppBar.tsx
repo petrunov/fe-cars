@@ -1,19 +1,29 @@
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { isLoggedIn, removeToken } from '../utils/tokenUtils';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import {
+  isLoggedIn,
+  removeAuthenticatedUser,
+  removeToken,
+} from '../utils/tokenUtils';
 
 function CustomAppBar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     removeToken();
+    removeAuthenticatedUser();
     navigate('/');
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          component={RouterLink}
+          to="/"
+          sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
+        >
           Car Dashboard
         </Typography>
         {!isLoggedIn() ? (

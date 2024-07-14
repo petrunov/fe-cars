@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CarForm from '../components/CarForm';
 import { Car } from '../interfaces/Car';
+import AppAppBar from '../components/CustomAppBar';
 import { fetchCarById, createCar, updateCar } from '../services/carService';
 
 function CarPage() {
@@ -28,7 +29,12 @@ function CarPage() {
     }
   }
 
-  return <CarForm initialData={initialData} onSubmit={handleSubmit} />;
+  return (
+    <>
+      <AppAppBar />
+      <CarForm initialData={initialData} onSubmit={handleSubmit} />
+    </>
+  );
 }
 
 export default CarPage;
