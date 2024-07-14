@@ -1,12 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Alert,
-  CircularProgress,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Alert, CircularProgress } from '@mui/material';
 import { Car } from '../interfaces/Car';
 import CustomTable from '../components/CustomTable';
 import AppAppBar from '../components/CustomAppBar';
