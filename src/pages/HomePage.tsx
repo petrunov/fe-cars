@@ -54,7 +54,7 @@ function HomePage() {
         data={data}
         onEdit={onEdit}
         onDelete={onDelete}
-        currentUserId={authenticatedUser.sub}
+        currentUserId={authenticatedUser ? authenticatedUser.sub : null}
       />
     </>
   );

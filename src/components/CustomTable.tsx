@@ -18,7 +18,7 @@ interface CustomTableProps {
   data: Car[];
   onEdit: (car: Car) => void;
   onDelete: (id: number) => void;
-  currentUserId: number;
+  currentUserId: number | null;
 }
 
 function CustomTable({
@@ -67,7 +67,7 @@ function CustomTable({
               <TableCell>{row.mileage}</TableCell>
               <TableCell>{row.extras}</TableCell>
               <TableCell>
-                {row.userId === currentUserId && (
+                {currentUserId && row.userId === currentUserId && (
                   <>
                     <IconButton onClick={() => onEdit(row)} aria-label="edit">
                       <EditIcon />
