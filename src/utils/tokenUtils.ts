@@ -14,7 +14,7 @@ export const isLoggedIn = () => {
   return !!getToken();
 };
 
-export const setAuthenticatedUser = (user: string) => {
+export const setAuthenticatedUser = (user: object) => {
   sessionStorage.setItem('user', JSON.stringify(user));
 };
 

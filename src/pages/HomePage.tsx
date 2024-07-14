@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import { Car } from '../interfaces/Car';
 import CustomTable from '../components/CustomTable';
 import AppAppBar from '../components/CustomAppBar';
 import { fetchCars, deleteCar } from '../services/carService';
-import { getAuthenticatedUser } from '../utils/tokenUtils';
+import { useAuth } from '../hooks/useAuth';
 
 function HomePage() {
   const [data, setData] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  const authenticatedUser = useMemo(() => getAuthenticatedUser(), []);
+  const { user } = useAuth();
 
   useEffect(() => {
     const getData = async () => {
@@ -57,7 +57,7 @@ function HomePage() {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        sx={{ height: '10vh' }} // Use this if you want to center it vertically as well
+        sx={{ height: '10vh' }}
       >
         <Button
           variant="contained"
@@ -74,10 +74,10 @@ function HomePage() {
         data={data}
         onEdit={onEdit}
         onDelete={onDelete}
-        currentUserId={authenticatedUser ? authenticatedUser.sub : null}
+        currentUserId={user ? user.sub : null}
       />
     </>
   );
 }
 
-export default HomePage;
+export default React.memo(HomePage);

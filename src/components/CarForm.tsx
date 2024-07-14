@@ -24,7 +24,7 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
     city: '',
     mileage: '',
     extras: '',
-    ...initialData, // If initialData is provided, it will populate the form
+    ...initialData,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

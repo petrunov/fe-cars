@@ -1,10 +1,4 @@
-export interface User {
-  id: number;
-  username: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { User } from './User';
 
 export interface Car {
   id: number;

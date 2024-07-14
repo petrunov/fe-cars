@@ -1,18 +1,31 @@
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
-  isLoggedIn,
-  removeAuthenticatedUser,
-  removeToken,
-} from '../utils/tokenUtils';
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 function CustomAppBar() {
   const navigate = useNavigate();
+  const { isAuthenticated, logout, user } = useAuth();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
-    removeToken();
-    removeAuthenticatedUser();
-    navigate('/');
+    handleMenuClose();
+    logout();
   };
 
   return (
@@ -26,7 +39,7 @@ function CustomAppBar() {
         >
           Car Dashboard
         </Typography>
-        {!isLoggedIn() ? (
+        {!isAuthenticated ? (
           <>
             <Button color="inherit" onClick={() => navigate('/signin')}>
               Sign In
@@ -36,9 +49,18 @@ function CustomAppBar() {
             </Button>
           </>
         ) : (
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
+          <>
+            <Button color="inherit" onClick={handleMenuOpen}>
+              {user?.username}
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </>
         )}
       </Toolbar>
     </AppBar>

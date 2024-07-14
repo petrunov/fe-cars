@@ -1,4 +1,5 @@
-import * as React from 'react';
+// pages/SignUpPage.tsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -19,7 +20,7 @@ import {
   Theme,
   ThemeProvider,
 } from '@mui/material/styles';
-import { setAuthenticatedUser, setToken } from '../utils/tokenUtils';
+import { useAuth } from '../hooks/useAuth';
 
 const customTheme = createTheme({
   palette: {
@@ -38,9 +39,7 @@ interface FormData {
 }
 
 interface CopyrightProps {
-  // eslint-disable-next-line react/require-default-props
   className?: string;
-  // eslint-disable-next-line react/require-default-props
   sx?: SxProps<Theme>;
 }
 
@@ -64,6 +63,7 @@ function Copyright({ className = '', sx = {} }: CopyrightProps) {
 
 export default function SignUpPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = React.useState<FormData>({
     firstName: '',
     lastName: '',
@@ -103,8 +103,7 @@ export default function SignUpPage() {
         setError(errorData.message || 'Failed to register.');
       } else {
         const data = await response.json();
-        setToken(data.access_token);
-        setAuthenticatedUser(data.user);
+        login(data.user, data.access_token);
         navigate('/');
       }
     } catch {

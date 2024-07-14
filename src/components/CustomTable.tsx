@@ -27,7 +27,6 @@ function CustomTable({
   onDelete,
   currentUserId,
 }: CustomTableProps) {
-  console.log('currentUserId', currentUserId);
   return (
     <TableContainer component={Paper}>
       <Table>
