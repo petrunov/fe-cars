@@ -2,9 +2,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
+import CarPage from './pages/CarPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import RedirectIfLogged from './components/RedirectIfLogged';
-// import EditCarPage from './pages/EditCarPage';
-// import ProtectedRoute from './components/ProtectedRoute';
+
+<Route path="/cars/edit/:id" element={<CarPage />} />;
 
 function App() {
   return (
@@ -19,10 +21,11 @@ function App() {
           path="/signin"
           element={<RedirectIfLogged element={<SignInPage />} />}
         />
-        {/* <Route
-          path="/edit/car/:id"
-          element={<ProtectedRoute element={<EditCarPage />} />}
-        /> */}
+        <Route path="/new" element={<ProtectedRoute element={<CarPage />} />} />
+        <Route
+          path="/edit/:id"
+          element={<ProtectedRoute element={<CarPage />} />}
+        />
       </Routes>
     </Router>
   );
