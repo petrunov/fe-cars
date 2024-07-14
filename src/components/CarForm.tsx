@@ -7,6 +7,7 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
+import { SketchPicker } from 'react-color';
 import { useFormik } from 'formik';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -156,16 +157,22 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             error={formik.touched.hp && Boolean(formik.errors.hp)}
             helperText={formik.touched.hp && formik.errors.hp}
           />
-          <TextField
-            name="color"
-            label="Color"
-            fullWidth
-            value={formik.values.color}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.color && Boolean(formik.errors.color)}
-            helperText={formik.touched.color && formik.errors.color}
-          />
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography component="label" variant="body1">
+              Color
+            </Typography>
+            <SketchPicker
+              color={formik.values.color || '#fff'}
+              onChangeComplete={(color) =>
+                formik.setFieldValue('color', color.hex)
+              }
+            />
+            {formik.touched.color && formik.errors.color && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {formik.errors.color}
+              </Alert>
+            )}
+          </Box>
           <TextField
             name="price"
             label="Price"
