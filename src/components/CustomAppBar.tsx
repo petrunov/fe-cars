@@ -1,8 +1,8 @@
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { isLoggedIn, removeToken } from '../../utils/tokenUtils';
+import { isLoggedIn, removeToken } from '../utils/tokenUtils';
 
-function AppAppBar() {
+function CustomAppBar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -35,4 +35,4 @@ function AppAppBar() {
   );
 }
 
-export default AppAppBar;
+export default CustomAppBar;

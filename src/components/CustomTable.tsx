@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   TableContainer,
   Table,
@@ -8,7 +7,7 @@ import {
   TableBody,
   Paper,
 } from '@mui/material';
-import { Car } from '../../interfaces/Car';
+import { Car } from '../interfaces/Car';
 
 interface CustomTableProps {
   data: Car[];

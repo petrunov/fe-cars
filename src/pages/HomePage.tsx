@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import CustomTable from '../components/CustomTable/CustomTable';
+import CustomTable from '../components/CustomTable';
 import { Car } from '../interfaces/Car';
-import AppAppBar from '../components/AppAppBar/AppAppBar';
+import CustomAppBar from '../components/CustomAppBar';
 import { fetchCars } from '../services/carService';
 
 function HomePage() {
@@ -33,7 +33,7 @@ function HomePage() {
 
   return (
     <>
-      <AppAppBar />
+      <CustomAppBar />
       <CustomTable data={data} />
     </>
   );
