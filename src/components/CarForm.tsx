@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import { Link as RouterLink } from 'react-router-dom';
 import {
   TextField,
@@ -6,6 +7,10 @@ import {
   Box,
   Typography,
   Alert,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { SketchPicker } from 'react-color';
 import { useFormik } from 'formik';
@@ -18,6 +23,32 @@ interface CarFormProps {
   initialData?: Partial<Car>;
   onSubmit: (car: Partial<Car>) => void;
 }
+
+const makeOptions = ['BMW', 'Mercedes', 'Audi'];
+const gearboxOptions = ['Manual', 'Automatic'];
+const typesOptions = ['Sedan', 'Hatchback', 'Truck', 'SUV', 'Touring', 'Other'];
+const engineOptions = [
+  'Diesel',
+  'Petrol',
+  'Electric',
+  'Hybrid',
+  'Hydrogen',
+  'Other',
+];
+const cities = [
+  'New York',
+  'Los Angeles',
+  'Chicago',
+  'Houston',
+  'Phoenix',
+  'Philadelphia',
+  'San Antonio',
+  'San Diego',
+  'Dallas',
+  'San Jose',
+];
+
+const conditions = ['New', 'Used'];
 
 function CarForm({ initialData, onSubmit }: CarFormProps) {
   const formik = useFormik({
@@ -33,7 +64,7 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
       color: '',
       price: '',
       city: '',
-      mileage: '',
+      mileage: 0,
       extras: '',
       ...initialData,
     },
@@ -41,7 +72,11 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (values) => {
-      onSubmit(values);
+      const cleanedValues = {
+        ...values,
+        year: values.year || undefined, // Convert null to undefined
+      };
+      onSubmit(cleanedValues);
     },
   });
 
@@ -59,16 +94,21 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
           </Alert>
         )}
         <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
-          <TextField
-            name="make"
-            label="Make"
-            fullWidth
-            value={formik.values.make}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.make && Boolean(formik.errors.make)}
-            helperText={formik.touched.make && formik.errors.make}
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Make</InputLabel>
+            <Select
+              name="make"
+              value={formik.values.make}
+              onChange={formik.handleChange}
+              label="Make"
+            >
+              {makeOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             name="model"
             label="Model"
@@ -101,51 +141,66 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               )}
             />
           </LocalizationProvider>
-          <TextField
-            name="engine"
-            label="Engine"
-            fullWidth
-            value={formik.values.engine}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.engine && Boolean(formik.errors.engine)}
-            helperText={formik.touched.engine && formik.errors.engine}
-          />
-          <TextField
-            name="type"
-            label="Type"
-            fullWidth
-            value={formik.values.type}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.type && Boolean(formik.errors.type)}
-            helperText={formik.touched.type && formik.errors.type}
-          />
-          <TextField
-            name="gearbox"
-            label="Gearbox"
-            fullWidth
-            value={formik.values.gearbox}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.gearbox && Boolean(formik.errors.gearbox)}
-            helperText={formik.touched.gearbox && formik.errors.gearbox}
-          />
-          <TextField
-            name="car_condition"
-            label="Condition"
-            fullWidth
-            value={formik.values.car_condition}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={
-              formik.touched.car_condition &&
-              Boolean(formik.errors.car_condition)
-            }
-            helperText={
-              formik.touched.car_condition && formik.errors.car_condition
-            }
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Engine</InputLabel>
+            <Select
+              name="engine"
+              value={formik.values.engine}
+              onChange={formik.handleChange}
+              label="Engine"
+            >
+              {engineOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Type</InputLabel>
+            <Select
+              name="type"
+              value={formik.values.type}
+              onChange={formik.handleChange}
+              label="Type"
+            >
+              {typesOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Gearbox</InputLabel>
+            <Select
+              name="gearbox"
+              value={formik.values.gearbox}
+              onChange={formik.handleChange}
+              label="Gearbox"
+            >
+              {gearboxOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Condition</InputLabel>
+            <Select
+              name="car_condition"
+              value={formik.values.car_condition}
+              onChange={formik.handleChange}
+              label="Condition"
+            >
+              {conditions.map((condition) => (
+                <MenuItem key={condition} value={condition}>
+                  {condition}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             name="hp"
             label="HP"
@@ -157,22 +212,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             error={formik.touched.hp && Boolean(formik.errors.hp)}
             helperText={formik.touched.hp && formik.errors.hp}
           />
-          <Box sx={{ mt: 2, mb: 2 }}>
-            <Typography component="label" variant="body1">
-              Color
-            </Typography>
-            <SketchPicker
-              color={formik.values.color || '#fff'}
-              onChangeComplete={(color) =>
-                formik.setFieldValue('color', color.hex)
-              }
-            />
-            {formik.touched.color && formik.errors.color && (
-              <Alert severity="error" sx={{ mt: 1 }}>
-                {formik.errors.color}
-              </Alert>
-            )}
-          </Box>
           <TextField
             name="price"
             label="Price"
@@ -183,19 +222,25 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             error={formik.touched.price && Boolean(formik.errors.price)}
             helperText={formik.touched.price && formik.errors.price}
           />
-          <TextField
-            name="city"
-            label="City"
-            fullWidth
-            value={formik.values.city}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.city && Boolean(formik.errors.city)}
-            helperText={formik.touched.city && formik.errors.city}
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>City</InputLabel>
+            <Select
+              name="city"
+              value={formik.values.city}
+              onChange={formik.handleChange}
+              label="City"
+            >
+              {cities.map((city) => (
+                <MenuItem key={city} value={city}>
+                  {city}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             name="mileage"
             label="Mileage"
+            type="number"
             fullWidth
             value={formik.values.mileage}
             onChange={formik.handleChange}
@@ -213,6 +258,22 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             error={formik.touched.extras && Boolean(formik.errors.extras)}
             helperText={formik.touched.extras && formik.errors.extras}
           />
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography component="label" variant="body1">
+              Color
+            </Typography>
+            <SketchPicker
+              color={formik.values.color || '#fff'}
+              onChangeComplete={(color) =>
+                formik.setFieldValue('color', color.hex)
+              }
+            />
+            {formik.touched.color && formik.errors.color && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                {formik.errors.color}
+              </Alert>
+            )}
+          </Box>
           <Button
             type="submit"
             fullWidth
@@ -235,9 +296,5 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
     </Container>
   );
 }
-
-CarForm.defaultProps = {
-  initialData: undefined,
-};
 
 export default CarForm;

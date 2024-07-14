@@ -19,7 +19,10 @@ const carValidationSchema = yup.object().shape({
   color: yup.string().required('Color is required'),
   price: yup.number().required('Price is required'),
   city: yup.string().required('City is required'),
-  mileage: yup.number().required('Mileage is required'),
+  mileage: yup
+    .number()
+    .positive('Mileage must be a positive number')
+    .required('Mileage is required'),
   extras: yup.string().required('Extras is required'),
 });
 

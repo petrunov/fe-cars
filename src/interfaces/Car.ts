@@ -13,7 +13,7 @@ export interface Car {
   color: string;
   price: string;
   city: string;
-  mileage: string;
+  mileage: number;
   extras: string;
   createdAt: string;
   updatedAt: string;

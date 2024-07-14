@@ -83,7 +83,16 @@ function CustomTable({
                 <TableCell>{row.gearbox}</TableCell>
                 <TableCell>{row.car_condition}</TableCell>
                 <TableCell>{row.hp}</TableCell>
-                <TableCell>{row.color}</TableCell>
+                <TableCell>
+                  <div
+                    style={{
+                      backgroundColor: row.color,
+                      width: '50px',
+                      height: '20px',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </TableCell>
                 <TableCell>{row.price}</TableCell>
                 <TableCell>{row.city}</TableCell>
                 <TableCell>{row.mileage}</TableCell>
