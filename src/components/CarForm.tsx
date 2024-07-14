@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   TextField,
@@ -35,6 +36,8 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
       ...initialData,
     },
     validationSchema: carValidationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: (values) => {
       onSubmit(values);
     },
@@ -44,7 +47,7 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
     <Container component="main" maxWidth="sm">
       <Box sx={{ mt: 3 }}>
         <Typography component="h1" variant="h5">
-          {initialData ? 'Edit Car' : 'Create Car'}
+          {initialData && initialData.id ? 'Edit Car' : 'Create Car'}
         </Typography>
         {Object.keys(formik.errors).length > 0 && formik.touched && (
           <Alert severity="error" sx={{ mt: 2 }}>
@@ -60,7 +63,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.make}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.make && Boolean(formik.errors.make)}
             helperText={formik.touched.make && formik.errors.make}
@@ -71,7 +73,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.model}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.model && Boolean(formik.errors.model)}
             helperText={formik.touched.model && formik.errors.model}
@@ -83,7 +84,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             type="number"
             value={formik.values.year}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.year && Boolean(formik.errors.year)}
             helperText={formik.touched.year && formik.errors.year}
@@ -94,7 +94,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.engine}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.engine && Boolean(formik.errors.engine)}
             helperText={formik.touched.engine && formik.errors.engine}
@@ -105,7 +104,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.type}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.type && Boolean(formik.errors.type)}
             helperText={formik.touched.type && formik.errors.type}
@@ -116,7 +114,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.gearbox}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.gearbox && Boolean(formik.errors.gearbox)}
             helperText={formik.touched.gearbox && formik.errors.gearbox}
@@ -127,7 +124,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.car_condition}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={
               formik.touched.car_condition &&
@@ -144,7 +140,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             type="number"
             value={formik.values.hp}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.hp && Boolean(formik.errors.hp)}
             helperText={formik.touched.hp && formik.errors.hp}
@@ -155,7 +150,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.color}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.color && Boolean(formik.errors.color)}
             helperText={formik.touched.color && formik.errors.color}
@@ -166,7 +160,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.price}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.price && Boolean(formik.errors.price)}
             helperText={formik.touched.price && formik.errors.price}
@@ -177,7 +170,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.city}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.city && Boolean(formik.errors.city)}
             helperText={formik.touched.city && formik.errors.city}
@@ -188,7 +180,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.mileage}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.mileage && Boolean(formik.errors.mileage)}
             helperText={formik.touched.mileage && formik.errors.mileage}
@@ -199,7 +190,6 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             fullWidth
             value={formik.values.extras}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             margin="normal"
             error={formik.touched.extras && Boolean(formik.errors.extras)}
             helperText={formik.touched.extras && formik.errors.extras}
