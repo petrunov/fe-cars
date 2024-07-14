@@ -1,7 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
+import {
+  Box,
+  Button,
+  Alert,
+  CircularProgress,
+  Typography,
+} from '@mui/material';
 import { Car } from '../interfaces/Car';
 import CustomTable from '../components/CustomTable';
 import AppAppBar from '../components/CustomAppBar';
@@ -42,16 +47,27 @@ function HomePage() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
     <>
       <AppAppBar />
+
+      {error && (
+        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      )}
 
       <Box
         display="flex"
