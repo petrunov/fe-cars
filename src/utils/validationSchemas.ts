@@ -1,4 +1,3 @@
-// src/utils/validationSchemas.ts
 import * as yup from 'yup';
 
 const carValidationSchema = yup.object().shape({
@@ -6,7 +5,7 @@ const carValidationSchema = yup.object().shape({
   model: yup.string().required('Model is required'),
   year: yup
     .number()
-    .min(1886, 'Year must be after 1885')
+    .min(1885, 'Year must be after 1885')
     .required('Year is required'),
   engine: yup.string().required('Engine is required'),
   type: yup.string().required('Type is required'),
@@ -17,7 +16,10 @@ const carValidationSchema = yup.object().shape({
     .positive('HP must be a positive number')
     .required('HP is required'),
   color: yup.string().required('Color is required'),
-  price: yup.number().required('Price is required'),
+  price: yup
+    .number()
+    .positive('Price must be a positive number')
+    .required('Price is required'),
   city: yup.string().required('City is required'),
   mileage: yup
     .number()

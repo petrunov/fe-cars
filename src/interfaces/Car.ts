@@ -11,7 +11,7 @@ export interface Car {
   car_condition: string;
   hp: number;
   color: string;
-  price: string;
+  price: number;
   city: string;
   mileage: number;
   extras: string;

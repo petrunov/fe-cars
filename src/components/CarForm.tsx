@@ -11,6 +11,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Slider,
 } from '@mui/material';
 import { SketchPicker } from 'react-color';
 import { useFormik } from 'formik';
@@ -125,18 +126,29 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               label="Year"
               minDate={new Date(1885, 0, 1)}
               maxDate={new Date(2024, 11, 31)}
-              value={formik.values.year}
-              onChange={(value) =>
-                formik.setFieldValue('year', value?.getFullYear() || '')
+              value={
+                formik.values.year ? new Date(formik.values.year, 0, 1) : null
               }
+              onChange={(value) => {
+                const year = value ? value.getFullYear() : undefined;
+                formik.setFieldValue('year', year);
+              }}
               renderInput={(params) => (
                 <TextField
-                  {...params}
                   name="year"
                   margin="normal"
                   fullWidth
                   error={formik.touched.year && Boolean(formik.errors.year)}
                   helperText={formik.touched.year && formik.errors.year}
+                  value={params.inputProps?.value}
+                  onBlur={params.inputProps?.onBlur}
+                  onChange={params.inputProps?.onChange}
+                  label={params.label}
+                  variant={params.variant}
+                  inputRef={params.inputRef}
+                  InputLabelProps={params.InputLabelProps}
+                  InputProps={params.InputProps}
+                  FormHelperTextProps={params.FormHelperTextProps}
                 />
               )}
             />
@@ -201,27 +213,34 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               ))}
             </Select>
           </FormControl>
-          <TextField
-            name="hp"
-            label="HP"
-            fullWidth
-            type="number"
-            value={formik.values.hp}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.hp && Boolean(formik.errors.hp)}
-            helperText={formik.touched.hp && formik.errors.hp}
-          />
-          <TextField
-            name="price"
-            label="Price"
-            fullWidth
-            value={formik.values.price}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.price && Boolean(formik.errors.price)}
-            helperText={formik.touched.price && formik.errors.price}
-          />
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography component="label" variant="body1">
+              HP
+            </Typography>
+            <Slider
+              name="hp"
+              value={formik.values.hp}
+              onChange={(_event, value) => formik.setFieldValue('hp', value)}
+              step={1}
+              min={30}
+              max={3000}
+              valueLabelDisplay="auto"
+            />
+          </Box>
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography component="label" variant="body1">
+              Price
+            </Typography>
+            <Slider
+              name="price"
+              value={formik.values.price}
+              onChange={(_event, value) => formik.setFieldValue('price', value)}
+              step={500}
+              min={0}
+              max={1000000}
+              valueLabelDisplay="auto"
+            />
+          </Box>
           <FormControl fullWidth margin="normal">
             <InputLabel>City</InputLabel>
             <Select
@@ -237,17 +256,22 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               ))}
             </Select>
           </FormControl>
-          <TextField
-            name="mileage"
-            label="Mileage"
-            type="number"
-            fullWidth
-            value={formik.values.mileage}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.mileage && Boolean(formik.errors.mileage)}
-            helperText={formik.touched.mileage && formik.errors.mileage}
-          />
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography component="label" variant="body1">
+              Mileage
+            </Typography>
+            <Slider
+              name="mileage"
+              value={formik.values.mileage}
+              onChange={(_event, value) =>
+                formik.setFieldValue('mileage', value)
+              }
+              step={1000}
+              min={1000}
+              max={1000000}
+              valueLabelDisplay="auto"
+            />
+          </Box>
           <TextField
             name="extras"
             label="Extras"
