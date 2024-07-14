@@ -1,4 +1,5 @@
 /* eslint-disable react/require-default-props */
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   TextField,
@@ -19,39 +20,39 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Car } from '../interfaces/Car';
 import carValidationSchema from '../utils/validationSchemas';
+import fetchMakeOptions from '../services/makeService';
+import fetchEngineOptions from '../services/engineService';
+import fetchGearboxOptions from '../services/gearboxService';
+import fetchTypeOptions from '../services/typeService';
+import fetchCityOptions from '../services/cityService';
+import fetchConditionOptions from '../services/conditionService';
 
 interface CarFormProps {
   initialData?: Partial<Car>;
   onSubmit: (car: Partial<Car>) => void;
 }
 
-const makeOptions = ['BMW', 'Mercedes', 'Audi'];
-const gearboxOptions = ['Manual', 'Automatic'];
-const typesOptions = ['Sedan', 'Hatchback', 'Truck', 'SUV', 'Touring', 'Other'];
-const engineOptions = [
-  'Diesel',
-  'Petrol',
-  'Electric',
-  'Hybrid',
-  'Hydrogen',
-  'Other',
-];
-const cities = [
-  'New York',
-  'Los Angeles',
-  'Chicago',
-  'Houston',
-  'Phoenix',
-  'Philadelphia',
-  'San Antonio',
-  'San Diego',
-  'Dallas',
-  'San Jose',
-];
-
-const conditions = ['New', 'Used'];
-
 function CarForm({ initialData, onSubmit }: CarFormProps) {
+  const [makeOptions, setMakeOptions] = useState<Option[]>([]);
+  const [engineOptions, setEngineOptions] = useState<Option[]>([]);
+  const [gearboxOptions, setGearboxOptions] = useState<Option[]>([]);
+  const [typeOptions, setTypeOptions] = useState<Option[]>([]);
+  const [cityOptions, setCityOptions] = useState<Option[]>([]);
+  const [conditionOptions, setConditionOptions] = useState<Option[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setMakeOptions(await fetchMakeOptions());
+      setEngineOptions(await fetchEngineOptions());
+      setGearboxOptions(await fetchGearboxOptions());
+      setTypeOptions(await fetchTypeOptions());
+      setCityOptions(await fetchCityOptions());
+      setConditionOptions(await fetchConditionOptions());
+    };
+
+    fetchData();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       make: '',
@@ -104,8 +105,8 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               label="Make"
             >
               {makeOptions.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -126,29 +127,18 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               label="Year"
               minDate={new Date(1885, 0, 1)}
               maxDate={new Date(2024, 11, 31)}
-              value={
-                formik.values.year ? new Date(formik.values.year, 0, 1) : null
+              value={formik.values.year}
+              onChange={(value) =>
+                formik.setFieldValue('year', value?.getFullYear() || '')
               }
-              onChange={(value) => {
-                const year = value ? value.getFullYear() : undefined;
-                formik.setFieldValue('year', year);
-              }}
               renderInput={(params) => (
                 <TextField
+                  {...params}
                   name="year"
                   margin="normal"
                   fullWidth
                   error={formik.touched.year && Boolean(formik.errors.year)}
                   helperText={formik.touched.year && formik.errors.year}
-                  value={params.inputProps?.value}
-                  onBlur={params.inputProps?.onBlur}
-                  onChange={params.inputProps?.onChange}
-                  label={params.label}
-                  variant={params.variant}
-                  inputRef={params.inputRef}
-                  InputLabelProps={params.InputLabelProps}
-                  InputProps={params.InputProps}
-                  FormHelperTextProps={params.FormHelperTextProps}
                 />
               )}
             />
@@ -162,8 +152,8 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               label="Engine"
             >
               {engineOptions.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -176,9 +166,9 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               onChange={formik.handleChange}
               label="Type"
             >
-              {typesOptions.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+              {typeOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -192,8 +182,8 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               label="Gearbox"
             >
               {gearboxOptions.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -206,9 +196,9 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               onChange={formik.handleChange}
               label="Condition"
             >
-              {conditions.map((condition) => (
-                <MenuItem key={condition} value={condition}>
-                  {condition}
+              {conditionOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
@@ -259,9 +249,9 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
               onChange={formik.handleChange}
               label="City"
             >
-              {cities.map((city) => (
-                <MenuItem key={city} value={city}>
-                  {city}
+              {cityOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </Select>
