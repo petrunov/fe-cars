@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 import { Car } from '../interfaces/Car';
 
@@ -156,6 +157,15 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             sx={{ mt: 3, mb: 2 }}
           >
             {initialData ? 'Update Car' : 'Create Car'}
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            component={RouterLink}
+            to="/"
+            sx={{ mb: 10 }}
+          >
+            Cancel
           </Button>
         </Box>
       </Box>

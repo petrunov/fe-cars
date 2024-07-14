@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
 import { Car } from '../interfaces/Car';
 import CustomTable from '../components/CustomTable';
 import AppAppBar from '../components/CustomAppBar';
@@ -50,6 +52,24 @@ function HomePage() {
   return (
     <>
       <AppAppBar />
+
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: '10vh' }} // Use this if you want to center it vertically as well
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          component={RouterLink}
+          to="/new"
+          sx={{ textDecoration: 'none' }}
+        >
+          Add New Car
+        </Button>
+      </Box>
+
       <CustomTable
         data={data}
         onEdit={onEdit}
