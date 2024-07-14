@@ -1,16 +1,29 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Alert,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SxProps, Theme } from '@mui/system';
+import { setToken } from '../utils/tokenUtils';
+
+const customTheme = createTheme({
+  palette: {
+    primary: { main: '#556cd6' },
+    secondary: { main: '#19857b' },
+    error: { main: '#ff1744' },
+    background: { default: '#fff' },
+  },
+});
 
 interface FormData {
   firstName: string;
@@ -44,44 +57,22 @@ function Copyright({ className = '', sx = {} }: CopyrightProps) {
   );
 }
 
-const customTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#556cd6',
-    },
-    secondary: {
-      main: '#19857b',
-    },
-    error: {
-      main: '#ff1744',
-    },
-    background: {
-      default: '#fff',
-    },
-  },
-});
-
-export default function SignUp() {
+export default function SignUpPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = React.useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
   });
-
   const [error, setError] = React.useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    // Basic client-side validation
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -95,11 +86,9 @@ export default function SignUp() {
     try {
       const response = await fetch('http://localhost:3001/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: formData.email, // Assuming email can serve as username
+          username: formData.email,
           password: formData.password,
         }),
       });
@@ -108,10 +97,11 @@ export default function SignUp() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to register.');
       } else {
-        // Handle successful registration (e.g., redirect)
-        console.log('User registered successfully.');
+        const data = await response.json();
+        setToken(data.access_token);
+        navigate('/');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to register.');
     }
   };
@@ -134,6 +124,11 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          {error && (
+            <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+              {error}
+            </Alert>
+          )}
           <Box
             component="form"
             noValidate
@@ -192,11 +187,6 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
-            {error && (
-              <Typography color="error" align="center" sx={{ mt: 2 }}>
-                {error}
-              </Typography>
-            )}
             <Button
               type="submit"
               fullWidth

@@ -1,18 +1,31 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Alert,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SxProps, Theme } from '@mui/system';
+import { setToken } from '../utils/tokenUtils';
+
+const customTheme = createTheme({
+  palette: {
+    primary: { main: '#556cd6' },
+    secondary: { main: '#19857b' },
+    error: { main: '#ff1744' },
+    background: { default: '#fff' },
+  },
+});
 
 interface CopyrightProps {
   // eslint-disable-next-line react/require-default-props
@@ -39,31 +52,47 @@ function Copyright({ className = '', sx = {} }: CopyrightProps) {
   );
 }
 
-const customTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#556cd6',
-    },
-    secondary: {
-      main: '#19857b',
-    },
-    error: {
-      main: '#ff1744',
-    },
-    background: {
-      default: '#fff',
-    },
-  },
-});
+export default function SignInPage() {
+  const navigate = useNavigate();
+  const [error, setError] = React.useState<string>('');
 
-export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const form = event.currentTarget;
+
+    if (!form.checkValidity()) {
+      setError('Both email and password are required.');
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    let err = 'Login failed. Please try again.';
+
+    try {
+      const response = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setToken(data.access_token);
+        navigate('/');
+      } else {
+        const data = await response.json();
+        err = data.message || err;
+
+        if (err === 'Unauthorized') {
+          err = 'Username or Password were incorrect. Please try again.';
+        }
+        setError(err);
+      }
+    } catch {
+      setError(err);
+    }
   };
 
   return (
@@ -84,6 +113,11 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {error && (
+            <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+              {error}
+            </Alert>
+          )}
           <Box
             component="form"
             onSubmit={handleSubmit}

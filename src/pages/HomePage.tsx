@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import CustomTable from '../components/CustomTable/CustomTable';
 import { Car } from '../interfaces/Car';
 import AppAppBar from '../components/AppAppBar/AppAppBar';
-import { fetchCars as fetchData } from '../services/carService';
+import { fetchCars } from '../services/carService';
 
 function HomePage() {
   const [data, setData] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null); // Ensure error is declared only once
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const cars = await fetchData();
+        const cars = await fetchCars();
         setData(cars);
         setLoading(false);
       } catch (err) {
