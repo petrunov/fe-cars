@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   TextField,
@@ -9,6 +8,8 @@ import {
   Alert,
 } from '@mui/material';
 import { useFormik } from 'formik';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Car } from '../interfaces/Car';
 import carValidationSchema from '../utils/validationSchemas';
 
@@ -22,7 +23,7 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
     initialValues: {
       make: '',
       model: '',
-      year: 0,
+      year: null,
       engine: '',
       type: '',
       gearbox: '',
@@ -77,17 +78,28 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             error={formik.touched.model && Boolean(formik.errors.model)}
             helperText={formik.touched.model && formik.errors.model}
           />
-          <TextField
-            name="year"
-            label="Year"
-            fullWidth
-            type="number"
-            value={formik.values.year}
-            onChange={formik.handleChange}
-            margin="normal"
-            error={formik.touched.year && Boolean(formik.errors.year)}
-            helperText={formik.touched.year && formik.errors.year}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              views={['year']}
+              label="Year"
+              minDate={new Date(1885, 0, 1)}
+              maxDate={new Date(2024, 11, 31)}
+              value={formik.values.year}
+              onChange={(value) =>
+                formik.setFieldValue('year', value?.getFullYear() || '')
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="year"
+                  margin="normal"
+                  fullWidth
+                  error={formik.touched.year && Boolean(formik.errors.year)}
+                  helperText={formik.touched.year && formik.errors.year}
+                />
+              )}
+            />
+          </LocalizationProvider>
           <TextField
             name="engine"
             label="Engine"
