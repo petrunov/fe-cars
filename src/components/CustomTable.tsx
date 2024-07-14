@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   TableContainer,
   Table,
@@ -6,14 +7,25 @@ import {
   TableCell,
   TableBody,
   Paper,
+  IconButton,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Car } from '../interfaces/Car';
 
 interface CustomTableProps {
   data: Car[];
+  onEdit: (car: Car) => void;
+  onDelete: (id: number) => void;
+  currentUserId: number;
 }
 
-function CustomTable({ data }: CustomTableProps) {
+function CustomTable({
+  data,
+  onEdit,
+  onDelete,
+  currentUserId,
+}: CustomTableProps) {
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -33,6 +45,7 @@ function CustomTable({ data }: CustomTableProps) {
             <TableCell className="font-bold">City</TableCell>
             <TableCell className="font-bold">Mileage</TableCell>
             <TableCell className="font-bold">Extras</TableCell>
+            <TableCell className="font-bold">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -52,6 +65,21 @@ function CustomTable({ data }: CustomTableProps) {
               <TableCell>{row.city}</TableCell>
               <TableCell>{row.mileage}</TableCell>
               <TableCell>{row.extras}</TableCell>
+              <TableCell>
+                {row.userId === currentUserId && (
+                  <>
+                    <IconButton onClick={() => onEdit(row)} aria-label="edit">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => onDelete(row.id)}
+                      aria-label="delete"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

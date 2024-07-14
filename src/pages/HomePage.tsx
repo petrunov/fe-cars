@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
-import CustomTable from '../components/CustomTable';
+import { useState, useEffect, useCallback } from 'react';
 import { Car } from '../interfaces/Car';
-import CustomAppBar from '../components/CustomAppBar';
-import { fetchCars } from '../services/carService';
+import CustomTable from '../components/CustomTable';
+import AppAppBar from '../components/CustomAppBar';
+import { fetchCars, deleteCar } from '../services/carService';
+import { getAuthenticatedUser } from '../utils/tokenUtils';
 
 function HomePage() {
   const [data, setData] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const authenticatedUser = getAuthenticatedUser();
+
+  console.log('authenticatedUser', authenticatedUser);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,6 +28,21 @@ function HomePage() {
     getData();
   }, []);
 
+  const onDelete = useCallback(async (id: number): Promise<void> => {
+    try {
+      await deleteCar(id);
+      setData((prevData) => prevData.filter((car) => car.id !== id));
+    } catch (err) {
+      setError('Error deleting car');
+    }
+  }, []);
+
+  const onEdit = useCallback((row: Car): void => {
+    // Handle the edit action (e.g., open a modal with car details)
+    console.log('Edit car:', row);
+    // You can implement your modal or navigation logic here
+  }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -33,8 +53,13 @@ function HomePage() {
 
   return (
     <>
-      <CustomAppBar />
-      <CustomTable data={data} />
+      <AppAppBar />
+      <CustomTable
+        data={data}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        currentUserId={authenticatedUser.sub}
+      />
     </>
   );
 }

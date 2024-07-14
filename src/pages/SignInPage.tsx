@@ -15,8 +15,13 @@ import {
   Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { setToken } from '../utils/tokenUtils';
+import {
+  createTheme,
+  SxProps,
+  Theme,
+  ThemeProvider,
+} from '@mui/material/styles';
+import { setAuthenticatedUser, setToken } from '../utils/tokenUtils';
 
 const customTheme = createTheme({
   palette: {
@@ -80,6 +85,7 @@ export default function SignInPage() {
       if (response.ok) {
         const data = await response.json();
         setToken(data.access_token);
+        setAuthenticatedUser(data.user);
         navigate('/');
       } else {
         const data = await response.json();

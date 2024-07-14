@@ -9,4 +9,13 @@ export async function fetchCars(): Promise<Car[]> {
   return data;
 }
 
+export async function deleteCar(id: number): Promise<void> {
+  const response = await fetch(`http://localhost:3001/cars/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete car');
+  }
+}
+
 export default fetchCars;

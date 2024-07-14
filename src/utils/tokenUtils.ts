@@ -13,3 +13,16 @@ export const removeToken = () => {
 export const isLoggedIn = () => {
   return !!getToken();
 };
+
+export const setAuthenticatedUser = (user: string) => {
+  sessionStorage.setItem('user', JSON.stringify(user));
+};
+
+export const getAuthenticatedUser = () => {
+  const user = sessionStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+
+export const removeAuthenticatedUser = () => {
+  sessionStorage.removeItem('user');
+};
