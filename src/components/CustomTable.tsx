@@ -88,4 +88,4 @@ function CustomTable({
   );
 }
 
-export default CustomTable;
+export default React.memo(CustomTable);

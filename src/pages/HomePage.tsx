@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Car } from '../interfaces/Car';
 import CustomTable from '../components/CustomTable';
 import AppAppBar from '../components/CustomAppBar';
@@ -10,9 +10,7 @@ function HomePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const authenticatedUser = getAuthenticatedUser();
-
-  console.log('authenticatedUser', authenticatedUser);
+  const authenticatedUser = useMemo(() => getAuthenticatedUser(), []);
 
   useEffect(() => {
     const getData = async () => {
@@ -38,9 +36,7 @@ function HomePage() {
   }, []);
 
   const onEdit = useCallback((row: Car): void => {
-    // Handle the edit action (e.g., open a modal with car details)
     console.log('Edit car:', row);
-    // You can implement your modal or navigation logic here
   }, []);
 
   if (loading) {
