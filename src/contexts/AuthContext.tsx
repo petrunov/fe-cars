@@ -13,6 +13,7 @@ import {
   setAuthenticatedUser,
   setToken,
   getAuthenticatedUser,
+  getToken,
 } from '../utils/tokenUtils';
 
 export interface AuthContextProps {
@@ -20,6 +21,7 @@ export interface AuthContextProps {
   login: (user: User, token: string) => void;
   logout: () => void;
   user: User | null;
+  getToken: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -44,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       isAuthenticated: !!user,
+      getToken,
       login,
       logout,
       user,

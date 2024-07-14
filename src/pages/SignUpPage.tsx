@@ -1,4 +1,3 @@
-// pages/SignUpPage.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -39,7 +38,9 @@ interface FormData {
 }
 
 interface CopyrightProps {
+  // eslint-disable-next-line react/require-default-props
   className?: string;
+  // eslint-disable-next-line react/require-default-props
   sx?: SxProps<Theme>;
 }
 

@@ -1,39 +1,83 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CarForm from '../components/CarForm';
+import { Box, Alert, CircularProgress } from '@mui/material';
 import { Car } from '../interfaces/Car';
-import AppAppBar from '../components/CustomAppBar';
-import { fetchCarById, createCar, updateCar } from '../services/carService';
+import { createCar, updateCar, fetchCarById } from '../services/carService';
+import { useAuth } from '../hooks/useAuth';
+import CarForm from '../components/CarForm';
+import CustomAppBar from '../components/CustomAppBar';
 
 function CarPage() {
   const { id } = useParams<{ id: string }>();
-  const [initialData, setInitialData] = useState<Car | null>(null);
+  const [car, setCar] = useState<Partial<Car>>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { getToken } = useAuth();
   const navigate = useNavigate();
+
+  const fetchData = async (carId: number) => {
+    try {
+      const fetchedCar = await fetchCarById(carId);
+      setCar(fetchedCar);
+    } catch (err) {
+      setError('Error fetching car');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (id) {
-      fetchCarById(Number(id)).then(setInitialData).catch(console.error);
+      fetchData(parseInt(id, 10));
+    } else {
+      setLoading(false);
     }
   }, [id]);
 
-  async function handleSubmit(car: Partial<Car>) {
-    try {
-      if (id) {
-        await updateCar(Number(id), car);
+  const handleSave = useCallback(
+    async (carData: Partial<Car>) => {
+      const token = getToken();
+      if (token) {
+        try {
+          if (id) {
+            await updateCar(parseInt(id, 10), carData, token);
+          } else {
+            await createCar(carData, token);
+          }
+          navigate('/');
+        } catch (err) {
+          setError('Error saving car');
+        }
       } else {
-        await createCar(car);
+        setError('User is not authenticated');
       }
-      navigate('/');
-    } catch (error) {
-      console.error('Failed to save car:', error);
-    }
+    },
+    [id, getToken, navigate]
+  );
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
-    <>
-      <AppAppBar />
-      <CarForm initialData={initialData} onSubmit={handleSubmit} />
-    </>
+    <div>
+      <CustomAppBar />
+      {error && (
+        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      )}
+      <CarForm initialData={car} onSubmit={handleSave} />
+    </div>
   );
 }
 

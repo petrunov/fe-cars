@@ -1,41 +1,44 @@
-/* eslint-disable react/jsx-no-bind */
-import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { TextField, Button, Container, Box, Typography } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Container,
+  Box,
+  Typography,
+  Alert,
+} from '@mui/material';
+import { useFormik } from 'formik';
 import { Car } from '../interfaces/Car';
+import carValidationSchema from '../utils/validationSchemas';
 
 interface CarFormProps {
-  initialData?: Car;
+  initialData?: Partial<Car>;
   onSubmit: (car: Partial<Car>) => void;
 }
 
 function CarForm({ initialData, onSubmit }: CarFormProps) {
-  const [car, setCar] = useState<Partial<Car>>({
-    make: '',
-    model: '',
-    year: 0,
-    engine: '',
-    type: '',
-    gearbox: '',
-    car_condition: '',
-    hp: 0,
-    color: '',
-    price: '',
-    city: '',
-    mileage: '',
-    extras: '',
-    ...initialData,
+  const formik = useFormik({
+    initialValues: {
+      make: '',
+      model: '',
+      year: 0,
+      engine: '',
+      type: '',
+      gearbox: '',
+      car_condition: '',
+      hp: 0,
+      color: '',
+      price: '',
+      city: '',
+      mileage: '',
+      extras: '',
+      ...initialData,
+    },
+    validationSchema: carValidationSchema,
+    onSubmit: (values) => {
+      onSubmit(values);
+    },
   });
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setCar((prevCar) => ({ ...prevCar, [name]: value }));
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    onSubmit(car);
-  }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -43,112 +46,163 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
         <Typography component="h1" variant="h5">
           {initialData ? 'Edit Car' : 'Create Car'}
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        {Object.keys(formik.errors).length > 0 && formik.touched && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {Object.values(formik.errors).map((error) => (
+              <div key={error}>{error}</div>
+            ))}
+          </Alert>
+        )}
+        <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
           <TextField
             name="make"
             label="Make"
             fullWidth
-            value={car.make}
-            onChange={handleChange}
+            value={formik.values.make}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.make && Boolean(formik.errors.make)}
+            helperText={formik.touched.make && formik.errors.make}
           />
           <TextField
             name="model"
             label="Model"
             fullWidth
-            value={car.model}
-            onChange={handleChange}
+            value={formik.values.model}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.model && Boolean(formik.errors.model)}
+            helperText={formik.touched.model && formik.errors.model}
           />
           <TextField
             name="year"
             label="Year"
             fullWidth
             type="number"
-            value={car.year}
-            onChange={handleChange}
+            value={formik.values.year}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.year && Boolean(formik.errors.year)}
+            helperText={formik.touched.year && formik.errors.year}
           />
           <TextField
             name="engine"
             label="Engine"
             fullWidth
-            value={car.engine}
-            onChange={handleChange}
+            value={formik.values.engine}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.engine && Boolean(formik.errors.engine)}
+            helperText={formik.touched.engine && formik.errors.engine}
           />
           <TextField
             name="type"
             label="Type"
             fullWidth
-            value={car.type}
-            onChange={handleChange}
+            value={formik.values.type}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.type && Boolean(formik.errors.type)}
+            helperText={formik.touched.type && formik.errors.type}
           />
           <TextField
             name="gearbox"
             label="Gearbox"
             fullWidth
-            value={car.gearbox}
-            onChange={handleChange}
+            value={formik.values.gearbox}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.gearbox && Boolean(formik.errors.gearbox)}
+            helperText={formik.touched.gearbox && formik.errors.gearbox}
           />
           <TextField
             name="car_condition"
             label="Condition"
             fullWidth
-            value={car.car_condition}
-            onChange={handleChange}
+            value={formik.values.car_condition}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={
+              formik.touched.car_condition &&
+              Boolean(formik.errors.car_condition)
+            }
+            helperText={
+              formik.touched.car_condition && formik.errors.car_condition
+            }
           />
           <TextField
             name="hp"
             label="HP"
             fullWidth
             type="number"
-            value={car.hp}
-            onChange={handleChange}
+            value={formik.values.hp}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.hp && Boolean(formik.errors.hp)}
+            helperText={formik.touched.hp && formik.errors.hp}
           />
           <TextField
             name="color"
             label="Color"
             fullWidth
-            value={car.color}
-            onChange={handleChange}
+            value={formik.values.color}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.color && Boolean(formik.errors.color)}
+            helperText={formik.touched.color && formik.errors.color}
           />
           <TextField
             name="price"
             label="Price"
             fullWidth
-            value={car.price}
-            onChange={handleChange}
+            value={formik.values.price}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.price && Boolean(formik.errors.price)}
+            helperText={formik.touched.price && formik.errors.price}
           />
           <TextField
             name="city"
             label="City"
             fullWidth
-            value={car.city}
-            onChange={handleChange}
+            value={formik.values.city}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.city && Boolean(formik.errors.city)}
+            helperText={formik.touched.city && formik.errors.city}
           />
           <TextField
             name="mileage"
             label="Mileage"
             fullWidth
-            value={car.mileage}
-            onChange={handleChange}
+            value={formik.values.mileage}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.mileage && Boolean(formik.errors.mileage)}
+            helperText={formik.touched.mileage && formik.errors.mileage}
           />
           <TextField
             name="extras"
             label="Extras"
             fullWidth
-            value={car.extras}
-            onChange={handleChange}
+            value={formik.values.extras}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             margin="normal"
+            error={formik.touched.extras && Boolean(formik.errors.extras)}
+            helperText={formik.touched.extras && formik.errors.extras}
           />
           <Button
             type="submit"
@@ -156,7 +210,7 @@ function CarForm({ initialData, onSubmit }: CarFormProps) {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            {initialData ? 'Update Car' : 'Create Car'}
+            {initialData && initialData.id ? 'Update Car' : 'Create Car'}
           </Button>
           <Button
             variant="contained"
